@@ -1,0 +1,63 @@
+$primary-color: #39cdcc;
+$bgPrimary-color: #fbfbfb;
+$bgSecondary-color: #ffff;
+$secondary-color: #213f7d;
+$primaryText-color: #545f7d;
+
+//DarkMode
+$DarkPrimary-color: #39cdcc;
+$DarkSecondary-color: #fbfbfb;
+$DarkPrimaryText-color: #213f7d;
+$DarkSecondaryText-color: #545f7d;
+
+$breakpoints: (
+  "sm": 576px,
+  "md": 768px,
+  "lg": 992px,
+  "xl": 1200px,
+  "xxl": 1400px,
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media screen and (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin responsive-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@mixin navText {
+  color: $secondary-color;
+  font-weight: 400;
+  text-align: start;
+  font-size: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Work Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $bgPrimary-color;
+  display: flex;
+  height: 100vh;
+  position: relative;
+}
