@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
 $primary-color: #39cdcc;
 $bgPrimary-color: #fbfbfb;
 $bgSecondary-color: #ffff;
@@ -57,7 +59,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: $bgPrimary-color;
-  display: flex;
-  height: 100vh;
+  width: 100vw;
   position: relative;
 }

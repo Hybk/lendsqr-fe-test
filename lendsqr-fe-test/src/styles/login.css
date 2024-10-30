@@ -10,19 +10,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fbfbfb;
-  display: flex;
-  height: 100vh;
+  width: 100vw;
   position: relative;
 }
 
-body {
+.log__body {
   font-family: "Avenir", sans-serif;
   width: 100%;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
+  overflow: hidden !important;
+  height: 100vh;
 }
-body #logoImg {
+.log__body #logoImg {
   max-width: 100%;
   height: auto;
   display: block;
@@ -36,7 +34,7 @@ body #logoImg {
   align-self: center !important;
 }
 @media screen and (min-width: 576px) {
-  body #logoImg {
+  .log__body #logoImg {
     top: 10%;
     left: 5%;
   }
@@ -53,7 +51,8 @@ body #logoImg {
     width: 400px;
     height: auto;
     position: relative;
-    left: 10%;
+    top: 34%;
+    left: 4% !important;
     margin-top: 4rem;
   }
   #first__side img {
@@ -66,19 +65,22 @@ body #logoImg {
 }
 @media screen and (min-width: 992px) {
   #first__side {
+    top: 30%;
     left: 10%;
     width: 500px;
   }
 }
 @media screen and (min-width: 1200px) {
   #first__side {
-    left: 15%;
+    top: 28% !important;
+    left: 20%;
     width: 550px;
   }
 }
 @media screen and (min-width: 1400px) {
   #first__side {
-    left: 35%;
+    top: 25% !important;
+    left: 10% !important;
     width: 600px;
   }
 }
@@ -94,7 +96,7 @@ body #logoImg {
   align-items: center;
   justify-content: center;
   flex-direction: column !important;
-  align-items: start !important;
+  align-items: start;
   gap: 3rem;
   z-index: 10;
   padding: 6rem 4rem 2rem;
@@ -119,18 +121,18 @@ body #logoImg {
     padding: 0 10%;
   }
 }
-#second__side .header {
+#second__side .header__text {
   font-size: 40px;
   font-weight: bold;
   color: #213f7d;
 }
 @media screen and (min-width: 768px) {
-  #second__side .header {
+  #second__side .header__text {
     font-size: 32px;
   }
 }
 @media screen and (min-width: 992px) {
-  #second__side .header {
+  #second__side .header__text {
     font-size: 40px;
   }
 }
@@ -154,7 +156,7 @@ body #logoImg {
   display: flex;
   align-items: center;
   justify-content: center;
-  align-items: start;
+  align-items: start !important;
   flex-direction: column !important;
   gap: 0.5rem;
 }
@@ -244,6 +246,31 @@ body #logoImg {
 }
 .form .login__button:hover {
   background-color: #30bdbc;
+}
+.form .login__button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.form .login__button .loader__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form .login__button .loader__icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.5rem;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.form .login__button .loader {
+  animation: spin 0.7s linear infinite;
 }
 .form .total__input {
   display: flex;

@@ -3,27 +3,54 @@ import "../styles/login.scss";
 import unboardSVG from "../assets/pablo-sign-in.png";
 import Logo from "../assets/Group.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    setIsLoading(true);
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Form data:", formData);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="body">
+    <div className="log__body">
       <img id="logoImg" src={Logo} alt="Company's Logo" />
       <div id="first__side">
         <img src={unboardSVG} alt="A visual representation for login" />
       </div>
       <div id="second__side">
         <div className="input__text">
-          <h1 className="header">Welcome!</h1>
+          <h1 className="header__text">Welcome!</h1>
           <p className="paragraph">Enter details to login.</p>
         </div>
         <div className="form">
@@ -33,10 +60,11 @@ const Login: React.FC = () => {
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   placeholder="Email"
                   className="form__input"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -45,10 +73,11 @@ const Login: React.FC = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
+                    name="password"
                     placeholder="Password"
                     className="form__input"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                   />
                   <button
@@ -64,8 +93,18 @@ const Login: React.FC = () => {
                 FORGOT PASSWORD?
               </a>
             </div>
-            <button type="submit" className="login__button">
-              LOG IN
+            <button
+              type="submit"
+              className="login__button"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className="loader__container">
+                  <Loader2 className="loader__icon loader" />
+                </span>
+              ) : (
+                "LOG IN"
+              )}
             </button>
           </form>
         </div>
