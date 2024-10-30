@@ -6,6 +6,7 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
+  overflow: hidden;
 
   #logoImg {
     @include responsive-image;
@@ -22,9 +23,6 @@ body {
     }
   }
 }
-//     @include respond-to("xxl") {
-//       width: 138.44px;
-//     }
 
 #first__side {
   display: none;

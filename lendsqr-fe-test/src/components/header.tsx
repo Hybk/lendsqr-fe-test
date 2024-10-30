@@ -1,4 +1,4 @@
-const header = () => {
+const header: React.FC = () => {
   return <div></div>;
 };
 
