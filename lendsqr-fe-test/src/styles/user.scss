@@ -1,7 +1,7 @@
-//
-
 .users {
   padding: 2rem;
+  width: 1200px;
+  margin: 0 auto;
 
   &__title {
     font-size: 2rem;
@@ -14,6 +14,7 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
+    max-width: 100%;
   }
 
   &__table-container {
@@ -22,6 +23,8 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     padding: 1.5rem;
     overflow-x: auto;
+    max-width: 100%;
+    margin: 0 auto;
   }
 
   &__loading {
@@ -61,14 +64,6 @@
       white-space: nowrap;
       background: #fafbfc;
       position: relative;
-
-      &:hover {
-        &::after {
-          content: "↕";
-          margin-left: 4px;
-          opacity: 0.5;
-        }
-      }
     }
 
     td {
@@ -144,12 +139,7 @@
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-  }
+  max-width: 240px;
 
   &__icon {
     width: 48px;
