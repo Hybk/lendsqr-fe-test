@@ -12,4 +12,15 @@ body {
   background-color: #fbfbfb;
   width: 100vw;
   position: relative;
-}/*# sourceMappingURL=Base.css.map */
+}
+
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+.dashboard__content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}/*# sourceMappingURL=Details.css.map */

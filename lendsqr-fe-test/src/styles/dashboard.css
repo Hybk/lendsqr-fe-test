@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -31,11 +32,12 @@ body {
   height: calc(100vh - 100px);
   overflow-y: auto;
   background-color: white;
-  border-right: 1px solid #e5e7eb;
   position: fixed;
   top: 100px;
   left: 0;
   bottom: 0;
+  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.0392156863);
+  z-index: 10;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
@@ -61,7 +63,6 @@ body {
   min-height: calc(100vh - 100px);
   overflow-y: auto;
   background-color: #fbfbfb;
-  padding: 24px;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }

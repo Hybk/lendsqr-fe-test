@@ -15,14 +15,12 @@ export interface UserFullData {
   dateJoined: string;
   status: "Active" | "Inactive" | "Pending" | "Blacklisted";
 
-  // Personal Information
   bvn: string;
   gender: "Male" | "Female";
   maritalStatus: "Single" | "Married" | "Divorced";
   children: string;
   typeOfResidence: string;
 
-  // Education and Employment
   levelOfEducation: string;
   employmentStatus: "Employed" | "Unemployed" | "Self-employed";
   sectorOfEmployment: string;
@@ -31,14 +29,12 @@ export interface UserFullData {
   monthlyIncome: string;
   loanRepayment: string;
 
-  // Socials
   socialMedia: {
     twitter: string;
     facebook: string;
     instagram: string;
   };
 
-  // Guarantor
   guarantor: {
     firstName: string;
     lastName: string;
@@ -218,14 +214,12 @@ class MockApiService {
         dateJoined: this.generateDateJoined(),
         status: this.getRandomElement(statuses),
 
-        // Personal Information
         bvn: this.generateBVN(),
         gender: Math.random() > 0.5 ? "Male" : "Female",
         maritalStatus: this.getRandomElement(["Single", "Married", "Divorced"]),
         children: this.getRandomElement(["None", "1", "2", "3", "4"]),
         typeOfResidence: this.getRandomElement(residenceTypes),
 
-        // Education and Employment
         levelOfEducation: this.getRandomElement(educationLevels),
         employmentStatus: this.getRandomElement([
           "Employed",
@@ -238,14 +232,12 @@ class MockApiService {
         monthlyIncome: this.generateMonthlyIncome(),
         loanRepayment: (Math.floor(Math.random() * 80000) + 20000).toString(),
 
-        // Socials
         socialMedia: {
           twitter: `@${firstName.toLowerCase()}${lastName.toLowerCase()}`,
           facebook: `${firstName} ${lastName}`,
           instagram: `@${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
         },
 
-        // Guarantor
         guarantor: {
           firstName: guarantorFirstName,
           lastName: guarantorLastName,

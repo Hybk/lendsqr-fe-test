@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -21,7 +22,7 @@ body {
   background-color: white;
   width: 100%;
   height: 100px;
-  box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 0px 20px 0px rgba(0, 0, 0, 0.0392156863);
   z-index: 20;
   color: #213f7d;
 }
@@ -36,13 +37,14 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+  right: 343px;
 }
 .header__search-input {
   width: 100%;
   height: 40px;
   padding: 0.5rem 3.5rem 0.5rem 1rem;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   font-size: 0.875rem;
   line-height: 1.25;
 }
@@ -65,8 +67,8 @@ body {
   color: white;
   background-color: #39cdcc;
   border: none;
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -83,10 +85,9 @@ body {
 .header__actions .docs-link {
   color: #213f7d;
   text-decoration: underline;
-  font-weight: 500;
-}
-.header__actions .docs-link:hover {
-  color: #111827;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.75px;
 }
 .header__actions .notification-btn {
   position: relative;
@@ -112,12 +113,12 @@ body {
 .header__actions .profile {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   cursor: pointer;
 }
 .header__actions .profile img {
-  width: 2rem;
-  height: 2rem;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   -o-object-fit: cover;
      object-fit: cover;

@@ -184,15 +184,16 @@ const navigationData: NavSection[] = [
   },
 ];
 
-const NavItem: React.FC<NavItem & { isActive: boolean }> = ({
-  title,
-  icon,
-  path,
-  isActive,
-}) => {
+const NavItem: React.FC<
+  NavItem & { isActive: boolean; onClickMobile?: () => void }
+> = ({ title, icon, path, isActive, onClickMobile }) => {
   return (
     <li className="nav-item">
-      <a href={path} className={`nav-link ${isActive ? "active" : ""}`}>
+      <a
+        href={path}
+        className={`nav-link ${isActive ? "active" : ""}`}
+        onClick={onClickMobile}
+      >
         {icon}
         <span>{title}</span>
       </a>

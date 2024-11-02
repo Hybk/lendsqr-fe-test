@@ -12,4 +12,11 @@ body {
   background-color: #fbfbfb;
   width: 100vw;
   position: relative;
-}/*# sourceMappingURL=Base.css.map */
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  background-color: #fbfbfb;
+}/*# sourceMappingURL=App.css.map */

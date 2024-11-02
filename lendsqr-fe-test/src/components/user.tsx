@@ -6,13 +6,14 @@ import {
   Wallet,
   PiggyBank,
   Filter,
+  Eye,
+  UserX,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { mockApi, GetUsersResponse, UserFullData } from "../mockAPI";
 import { storage } from "../storage";
 import FilterPopup from "./filterPopup";
 import "../styles/user.scss";
-
-// Type definitions
 
 type FilterMethodKey =
   | "setOrganizationFilter"
@@ -22,13 +23,22 @@ type FilterMethodKey =
   | "setPhoneNumberFilter"
   | "setStatusFilter";
 
+interface UserDropdownProps {
+  userId: string;
+  isOpen: boolean;
+  onAction: (action: string, userId: string) => void;
+}
 interface StorageInterface {
   getCurrentPage: () => number;
   setCurrentPage: (page: number) => void;
   getItemsPerPage: () => number;
   setItemsPerPage: (itemsPerPage: number) => void;
-
-  // Explicitly defined filter methods
+  getOrganizationFilter: () => string;
+  getUsernameFilter: () => string;
+  getEmailFilter: () => string;
+  getDateJoinedFilter: () => string;
+  getPhoneNumberFilter: () => string;
+  getStatusFilter: () => string;
   setOrganizationFilter: (value: string) => void;
   setUsernameFilter: (value: string) => void;
   setEmailFilter: (value: string) => void;
@@ -46,7 +56,7 @@ type User = Pick<
   | "phoneNumber"
   | "dateJoined"
   | "status"
->;
+> & { id: string };
 
 interface UserFilters {
   organization: string;
@@ -57,36 +67,29 @@ interface UserFilters {
   status: string;
 }
 
-interface StorageInterface {
-  getCurrentPage: () => number;
-  setCurrentPage: (page: number) => void;
-  getItemsPerPage: () => number;
-  setItemsPerPage: (itemsPerPage: number) => void;
-  setCurrentPageFilter: (page: number) => void;
-  setOrganizationFilter: (value: string) => void;
-  setUsernameFilter: (value: string) => void;
-  setEmailFilter: (value: string) => void;
-  setDateJoinedFilter: (value: string) => void;
-  setPhoneNumberFilter: (value: string) => void;
-  setStatusFilter: (value: string) => void;
-}
-
 const Users: React.FC = () => {
-  // State management
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(storage.getCurrentPage());
   const [itemsPerPage, setItemsPerPage] = useState(storage.getItemsPerPage());
   const [totalUsers, setTotalUsers] = useState(0);
   const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
+  const [filters, setFilters] = useState<UserFilters>({
+    organization: (storage as StorageInterface).getOrganizationFilter(),
+    username: (storage as StorageInterface).getUsernameFilter(),
+    email: (storage as StorageInterface).getEmailFilter(),
+    dateJoined: (storage as StorageInterface).getDateJoinedFilter(),
+    phoneNumber: (storage as StorageInterface).getPhoneNumberFilter(),
+    status: (storage as StorageInterface).getStatusFilter(),
+  });
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  // Memoized calculations
   const totalPages = useMemo(
     () => Math.ceil(totalUsers / itemsPerPage),
     [totalUsers, itemsPerPage]
   );
 
-  // Fetch users with error handling and simplified data transformation
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
@@ -95,15 +98,39 @@ const Users: React.FC = () => {
         itemsPerPage
       );
 
-      const simplifiedUsers: User[] = response.data.map((user) => ({
-        id: user.id,
-        organization: user.organization,
-        username: `${user.firstName} ${user.lastName}`,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        dateJoined: user.dateJoined,
-        status: user.status,
-      }));
+      const simplifiedUsers: User[] = response.data
+
+        .filter((user) => {
+          return (
+            (!filters.organization ||
+              user.organization
+                .toLowerCase()
+                .includes(filters.organization.toLowerCase())) &&
+            (!filters.username ||
+              `${user.firstName} ${user.lastName}`
+                .toLowerCase()
+                .includes(filters.username.toLowerCase())) &&
+            (!filters.email ||
+              user.email.toLowerCase().includes(filters.email.toLowerCase())) &&
+            (!filters.phoneNumber ||
+              user.phoneNumber.includes(filters.phoneNumber)) &&
+            (!filters.dateJoined ||
+              user.dateJoined.includes(filters.dateJoined)) &&
+            (!filters.status || user.status === filters.status)
+          );
+        })
+        .map(
+          (user) =>
+            ({
+              id: user.id.toString(),
+              organization: user.organization,
+              username: `${user.firstName} ${user.lastName}`,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+              dateJoined: user.dateJoined,
+              status: user.status,
+            } as User)
+        );
 
       setUsers(simplifiedUsers);
       setTotalUsers(response.total);
@@ -114,9 +141,8 @@ const Users: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, filters]);
 
-  // Side effects
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
@@ -129,37 +155,53 @@ const Users: React.FC = () => {
     storage.setItemsPerPage(itemsPerPage);
   }, [itemsPerPage]);
 
-  // Event Handlers
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        openDropdownId &&
+        !(event.target as HTMLElement).closest(".action-dropdown")
+      ) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openDropdownId]);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleFilter = (filters: UserFilters) => {
-    // Update the current page to 1 when applying new filters
-    storage.setCurrentPage(1);
+  const handleFilter = (newFilters: UserFilters) => {
+    setCurrentPage(1);
+    setFilters(newFilters);
 
-    // Type-safe filter method mapping
-    const filterMethodMap: Record<keyof UserFilters, FilterMethodKey> = {
-      organization: "setOrganizationFilter",
-      username: "setUsernameFilter",
-      email: "setEmailFilter",
-      dateJoined: "setDateJoinedFilter",
-      phoneNumber: "setPhoneNumberFilter",
-      status: "setStatusFilter",
-    };
-
-    // Update filters with type-safe method
-    (Object.keys(filters) as Array<keyof UserFilters>).forEach((key) => {
-      const value = filters[key];
-      if (value !== undefined) {
-        const methodName = filterMethodMap[key];
-        (storage as StorageInterface)[methodName](value);
-      }
+    const storageImpl = storage as StorageInterface;
+    Object.entries(newFilters).forEach(([key, value]) => {
+      const methodName = `set${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      }Filter` as FilterMethodKey;
+      storageImpl[methodName](value);
     });
-    fetchUsers();
-    setIsFilterPopupOpen(false);
   };
+
+  const handleUserAction = (action: string, userId: string) => {
+    switch (action) {
+      case "view":
+        navigate(`/dashboard/user/${userId}`);
+        break;
+      case "blacklist":
+        console.log("Blacklist user:", userId);
+        break;
+      case "activate":
+        console.log("Activate user:", userId);
+        break;
+    }
+    setOpenDropdownId(null);
+  };
+
   const getStatusClass = (status: string) => {
     const statusMap: Record<string, string> = {
       Active: "status--active",
@@ -169,7 +211,7 @@ const Users: React.FC = () => {
     };
     return `status ${statusMap[status] || ""}`;
   };
-  // Render components
+
   const renderStatsCards = () => (
     <div className="users__stats">
       {[
@@ -217,6 +259,7 @@ const Users: React.FC = () => {
               </option>
             ))}
           </select>
+          out of 100
         </label>
       </div>
 
@@ -262,6 +305,44 @@ const Users: React.FC = () => {
       </div>
     </div>
   );
+
+  const UserDropdown: React.FC<UserDropdownProps> = ({
+    userId,
+    isOpen,
+    onAction,
+  }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="user-dropdown">
+        <div className="user-dropdown__menu">
+          <button
+            className="user-dropdown__item"
+            onClick={() => onAction("view", userId)}
+          >
+            <Eye size={16} className="user-dropdown__icon" />
+            <span>View Details</span>
+          </button>
+
+          <button
+            className="user-dropdown__item"
+            onClick={() => onAction("blacklist", userId)}
+          >
+            <UserX size={16} className="user-dropdown__icon" />
+            <span>Blacklist User</span>
+          </button>
+
+          <button
+            className="user-dropdown__item"
+            onClick={() => onAction("activate", userId)}
+          >
+            <UserCheck size={16} className="user-dropdown__icon" />
+            <span>Activate User</span>
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="users">
@@ -318,23 +399,35 @@ const Users: React.FC = () => {
                       </span>
                     </td>
                     <td>
-                      <button
-                        className="action-button"
-                        aria-label="More options"
-                      >
-                        <MoreVertical size={16} />
-                      </button>
+                      <div className="action-dropdown">
+                        <button
+                          className="action-button"
+                          aria-label="More options"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenDropdownId(
+                              openDropdownId === user.id ? null : user.id
+                            );
+                          }}
+                        >
+                          <MoreVertical size={16} />
+                        </button>
+                        <UserDropdown
+                          userId={user.id}
+                          isOpen={openDropdownId === user.id}
+                          onAction={handleUserAction}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
-            {renderPagination()}
           </>
         )}
       </div>
 
+      {renderPagination()}
       <FilterPopup
         isOpen={isFilterPopupOpen}
         onClose={() => setIsFilterPopupOpen(false)}

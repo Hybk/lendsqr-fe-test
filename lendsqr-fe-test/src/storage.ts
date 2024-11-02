@@ -1,64 +1,73 @@
-export const storage = {
-  getItemsPerPage: (): number => {
-    const stored = localStorage.getItem("itemsPerPage");
-    return stored ? parseInt(stored, 10) : 10;
-  },
+// storage.ts
+class Storage {
+  private storage: { [key: string]: string } = {};
 
-  setItemsPerPage: (value: number): void => {
-    localStorage.setItem("itemsPerPage", value.toString());
-  },
+  // Page management
+  getCurrentPage(): number {
+    return parseInt(this.storage.currentPage || "1", 10);
+  }
 
-  getCurrentPage: (): number => {
-    const stored = localStorage.getItem("currentPage");
-    return stored ? parseInt(stored, 10) : 1;
-  },
+  setCurrentPage(page: number): void {
+    this.storage.currentPage = page.toString();
+  }
 
-  setCurrentPage: (value: number): void => {
-    localStorage.setItem("currentPage", value.toString());
-  },
+  getItemsPerPage(): number {
+    return parseInt(this.storage.itemsPerPage || "10", 10);
+  }
 
-  setColumnFilter: (column: string, value: string): void => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    filters[column] = value;
-    localStorage.setItem("columnFilters", JSON.stringify(filters));
-  },
+  setItemsPerPage(itemsPerPage: number): void {
+    this.storage.itemsPerPage = itemsPerPage.toString();
+  }
 
-  getColumnFilters: () => {
-    return JSON.parse(localStorage.getItem("columnFilters") || "{}");
-  },
+  // Filter getters
+  getOrganizationFilter(): string {
+    return this.storage.organizationFilter || "";
+  }
 
-  removeColumnFilter: (column: string): void => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    delete filters[column];
-    localStorage.setItem("columnFilters", JSON.stringify(filters));
-  },
+  getUsernameFilter(): string {
+    return this.storage.usernameFilter || "";
+  }
 
-  clearColumnFilters: (): void => {
-    localStorage.removeItem("columnFilters");
-  },
+  getEmailFilter(): string {
+    return this.storage.emailFilter || "";
+  }
 
-  getOrganizationFilter: (): string => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    return filters.organization || "";
-  },
-  getUsernameFilter: (): string => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    return filters.username || "";
-  },
-  getEmailFilter: (): string => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    return filters.email || "";
-  },
-  getDateJoinedFilter: (): string => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    return filters.dateJoined || "";
-  },
-  getPhoneNumberFilter: (): string => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    return filters.phoneNumber || "";
-  },
-  getStatusFilter: (): string => {
-    const filters = JSON.parse(localStorage.getItem("columnFilters") || "{}");
-    return filters.status || "";
-  },
-};
+  getDateJoinedFilter(): string {
+    return this.storage.dateJoinedFilter || "";
+  }
+
+  getPhoneNumberFilter(): string {
+    return this.storage.phoneNumberFilter || "";
+  }
+
+  getStatusFilter(): string {
+    return this.storage.statusFilter || "";
+  }
+
+  // Filter setters
+  setOrganizationFilter(value: string): void {
+    this.storage.organizationFilter = value;
+  }
+
+  setUsernameFilter(value: string): void {
+    this.storage.usernameFilter = value;
+  }
+
+  setEmailFilter(value: string): void {
+    this.storage.emailFilter = value;
+  }
+
+  setDateJoinedFilter(value: string): void {
+    this.storage.dateJoinedFilter = value;
+  }
+
+  setPhoneNumberFilter(value: string): void {
+    this.storage.phoneNumberFilter = value;
+  }
+
+  setStatusFilter(value: string): void {
+    this.storage.statusFilter = value;
+  }
+}
+
+export const storage = new Storage();
