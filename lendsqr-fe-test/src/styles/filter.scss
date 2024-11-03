@@ -1,3 +1,4 @@
+@import "./Base.scss";
 .filter-dropdown {
   &__container {
     position: relative;
@@ -43,7 +44,7 @@
 
     &:focus {
       outline: none;
-      border-color: #3b82f6;
+      border-color: $primary-color;
       box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
     }
   }
@@ -70,11 +71,11 @@
     }
 
     &--primary {
-      background-color: #3b82f6;
+      background-color: $primary-color;
       color: #fff;
 
       &:hover {
-        background-color: #2563eb;
+        background-color: $primary-color;
       }
     }
   }
