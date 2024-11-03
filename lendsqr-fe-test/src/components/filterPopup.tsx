@@ -30,7 +30,7 @@ interface FilterDropdownProps {
   isOpen: boolean;
   onClose: () => void;
   onFilter: (filters: UserFilters) => void;
-  anchorEl: HTMLElement | null; // Reference to the filter button
+  anchorEl: HTMLElement | null;
 }
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
@@ -42,7 +42,6 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const storageImpl = storage as StorageInterface;
 
-  const [position, setPosition] = useState({ top: 0, left: 0 });
   const [organization, setOrganization] = useState(
     storageImpl.getOrganizationFilter()
   );
@@ -73,8 +72,6 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         if (top + dropdownRect.height > window.innerHeight + window.scrollY) {
           top = rect.top + window.scrollY - dropdownRect.height - spacing;
         }
-
-        setPosition({ top, left });
       }
     };
     const handleClickOutside = (event: MouseEvent) => {
@@ -140,15 +137,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={dropdownRef}
-      className="filter-dropdown__content"
-      style={{
-        position: "fixed",
-        top: `${position.top}px`,
-        left: `${position.left}px`,
-      }}
-    >
+    <div ref={dropdownRef} className="filter-dropdown__content">
       <div className="filter-dropdown__form">
         <label className="filter-dropdown__label">
           <span className="filter-dropdown__label-text">Organization</span>

@@ -10,6 +10,7 @@
   font-family: "Work Sans", sans-serif;
   transform: translateX(0);
   transition: transform 0.3s ease;
+  overflow: visible;
 
   @media (min-width: 768px) and (max-width: 1023px) {
     width: 80px !important;

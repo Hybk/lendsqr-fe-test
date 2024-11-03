@@ -74,6 +74,9 @@ const Users: React.FC = () => {
   const [itemsPerPage, setItemsPerPage] = useState(storage.getItemsPerPage());
   const [totalUsers, setTotalUsers] = useState(0);
   const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLElement | null>(
+    null
+  );
   const [filters, setFilters] = useState<UserFilters>({
     organization: (storage as StorageInterface).getOrganizationFilter(),
     username: (storage as StorageInterface).getUsernameFilter(),
@@ -435,7 +438,11 @@ const Users: React.FC = () => {
       {renderPagination()}
       <FilterPopup
         isOpen={isFilterPopupOpen}
-        onClose={() => setIsFilterPopupOpen(false)}
+        anchorEl={filterAnchorEl}
+        onClose={() => {
+          setIsFilterPopupOpen(false);
+          setFilterAnchorEl(null);
+        }}
         onFilter={handleFilter}
       />
     </div>
