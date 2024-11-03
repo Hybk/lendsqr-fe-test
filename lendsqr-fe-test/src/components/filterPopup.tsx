@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { storage } from "../storage";
+import { mockApi } from "../mockAPI";
 import "../styles/filter.scss";
 
 interface UserFilters {
@@ -55,6 +56,18 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
   );
   const [status, setStatus] = useState(storageImpl.getStatusFilter());
 
+  // Get unique organizations from mock data
+  const [organizations, setOrganizations] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Get all users from the first page with a large limit to get all organizations
+    const { data } = mockApi.getUsers(1, 500);
+    const uniqueOrganizations = Array.from(
+      new Set(data.map((user) => user.organization))
+    ).sort();
+    setOrganizations(uniqueOrganizations);
+  }, []);
+
   useEffect(() => {
     const updatePosition = () => {
       if (anchorEl && dropdownRef.current) {
@@ -74,6 +87,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         }
       }
     };
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -141,12 +155,18 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       <div className="filter-dropdown__form">
         <label className="filter-dropdown__label">
           <span className="filter-dropdown__label-text">Organization</span>
-          <input
-            type="text"
+          <select
             value={organization}
             onChange={(e) => setOrganization(e.target.value)}
             className="filter-dropdown__input"
-          />
+          >
+            <option value="">All Organizations</option>
+            {organizations.map((org) => (
+              <option key={org} value={org}>
+                {org}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="filter-dropdown__label">
           <span className="filter-dropdown__label-text">Username</span>
