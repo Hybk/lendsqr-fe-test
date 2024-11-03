@@ -61,8 +61,13 @@ src/
 │   ├── dashboard/
 │   └── userDetails/
 ├── styles/
+│   └── App.scss
 │   ├── Base.scss
 │   └── user.scss
+│   └── login.scss
+│   └── dashboard.scss
+│   └── filter.scss
+│   └── Details.scss
 └── App.tsx
 └── MockAPI.ts
 └── Storage.ts
