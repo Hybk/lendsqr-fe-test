@@ -9,13 +9,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Navigate to="/dashboard/users" replace />} />
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route index element={<Navigate to="users" replace />} />
+          <Route index element={<Navigate to="/dashboard/users" replace />} />
           <Route path="users" element={<Users />} />
           <Route path="user/:id" element={<UserDetails />} />
         </Route>
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );

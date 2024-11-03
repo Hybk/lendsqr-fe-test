@@ -1,7 +1,286 @@
 @import "./Base.scss";
 
-.details {
-  padding: 2rem;
-  width: 1200px;
+.user-details-container {
+  max-width: map-get($breakpoints, "xl");
   margin: 0 auto;
+  padding: clamp(16px, 3vw, 24px);
+  background: $bgPrimary-color;
+
+  .loading,
+  .error {
+    @include flex-center;
+    padding: clamp(24px, 5vw, 40px);
+    font-size: clamp(16px, 2vw, 18px);
+    color: $primaryText-color;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(24px, 4vw, 32px);
+    gap: 16px;
+
+    @media screen and (max-width: map-get($breakpoints, "md")) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .back-button {
+      @include flex-center;
+      gap: 8px;
+      color: $primaryText-color;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: clamp(14px, 1.5vw, 16px);
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      .back-icon {
+        width: clamp(16px, 2vw, 20px);
+        height: clamp(16px, 2vw, 20px);
+      }
+
+      &:hover {
+        color: $secondary-color;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: clamp(12px, 2vw, 20px);
+
+      @media screen and (max-width: map-get($breakpoints, "md")) {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .btn {
+        padding: clamp(8px, 1.5vw, 12px) clamp(16px, 2vw, 24px);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: clamp(12px, 1.5vw, 14px);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        min-width: 120px;
+        text-align: center;
+
+        @media screen and (max-width: map-get($breakpoints, "md")) {
+          flex: 1;
+        }
+      }
+
+      .blacklist {
+        color: $danger-color;
+        border: 1px solid $danger-color;
+        background: transparent;
+
+        &:hover {
+          background: rgba($danger-color, 0.1);
+        }
+      }
+
+      .activate {
+        color: $primary-color;
+        border: 1px solid $primary-color;
+        background: transparent;
+
+        &:hover {
+          background: rgba($primary-color, 0.1);
+        }
+      }
+    }
+  }
+
+  .main-profile-header {
+    background: $bgSecondary-color;
+    box-shadow: 0 2px 4px rgba($secondary-color, 0.06);
+    border-radius: 4px;
+
+    .user-profile-header {
+      padding: clamp(20px, 3vw, 30px);
+      display: flex;
+      align-items: center;
+      gap: clamp(20px, 3vw, 30px);
+      flex-wrap: wrap;
+
+      @media screen and (max-width: map-get($breakpoints, "md")) {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .avatar-section {
+        .avatar {
+          width: clamp(80px, 10vw, 100px);
+          height: clamp(80px, 10vw, 100px);
+          background: lighten($primary-color, 45%);
+          border-radius: 50%;
+          @include flex-center;
+
+          .avatar-icon {
+            font-size: clamp(20px, 2.5vw, 24px);
+            color: $secondary-color;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .user-info,
+      .tier-info {
+        padding: clamp(16px, 2vw, 30px);
+        border-right: 1px solid $border-color;
+
+        @media screen and (max-width: map-get($breakpoints, "md")) {
+          border-right: none;
+          border-bottom: 1px solid $border-color;
+          padding: 20px 0;
+          width: 100%;
+        }
+      }
+
+      .user-info {
+        .user-name {
+          font-size: clamp(18px, 2.5vw, 22px);
+          color: $secondary-color;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .user-id {
+          color: $primaryText-color;
+          font-size: clamp(12px, 1.5vw, 14px);
+        }
+      }
+
+      .tier-info {
+        .tier-label {
+          color: $primaryText-color;
+          font-size: clamp(12px, 1.5vw, 14px);
+          margin-bottom: 8px;
+        }
+
+        .tier-stars {
+          display: flex;
+          gap: 4px;
+          margin-bottom: 8px;
+          justify-content: center;
+
+          .star {
+            width: clamp(14px, 1.5vw, 16px);
+            height: clamp(14px, 1.5vw, 16px);
+            color: $star-color;
+          }
+        }
+      }
+
+      .bank-info {
+        padding-left: clamp(20px, 3vw, 30px);
+        font-weight: 600;
+        color: $secondary-color;
+        font-size: clamp(18px, 2.5vw, 22px);
+
+        @media screen and (max-width: map-get($breakpoints, "md")) {
+          padding: 20px 0 0;
+          width: 100%;
+        }
+
+        .bank-name {
+          color: $primaryText-color;
+          font-size: clamp(10px, 1.2vw, 12px);
+          margin-top: 8px;
+        }
+      }
+    }
+
+    .tabs-navigation {
+      display: flex;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab-item {
+        padding: clamp(12px, 2vw, 16px) clamp(24px, 3vw, 32px);
+        color: $primaryText-color;
+        font-size: clamp(14px, 1.5vw, 16px);
+        border: none;
+        background: none;
+        position: relative;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.active {
+          color: $primary-color;
+          font-weight: 600;
+
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: $primary-color;
+          }
+        }
+
+        &:hover {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+
+  .info-sections {
+    background: $bgSecondary-color;
+    border-radius: 4px;
+    padding: clamp(20px, 3vw, 30px);
+
+    .info-section {
+      margin-bottom: clamp(30px, 5vw, 50px);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      h3 {
+        @include navText;
+        font-weight: 600;
+        margin-bottom: clamp(20px, 3vw, 30px);
+        text-transform: uppercase;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+        gap: clamp(20px, 3vw, 30px);
+
+        .info-item {
+          .label {
+            color: $primaryText-color;
+            font-size: clamp(10px, 1.2vw, 12px);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+          }
+
+          .value {
+            color: $primaryText-color;
+            font-size: clamp(14px, 1.5vw, 16px);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    margin-top: clamp(20px, 3vw, 30px);
+    box-shadow: 0 2px 4px rgba($secondary-color, 0.06);
+  }
 }

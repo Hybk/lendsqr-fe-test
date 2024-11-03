@@ -85,6 +85,19 @@ const Users: React.FC = () => {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const tableHeaders = useMemo(
+    () => [
+      { key: "organization", label: "Organization", alwaysShow: true },
+      { key: "username", label: "User", alwaysShow: true },
+      { key: "email", label: "Email", desktopOnly: true },
+      { key: "phoneNumber", label: "Phone Number", alwaysShow: true },
+      { key: "dateJoined", label: "Date Joined", alwaysShow: true },
+      { key: "status", label: "Status", alwaysShow: true },
+      { key: "actions", label: "", alwaysShow: true },
+    ],
+    []
+  );
+
   const totalPages = useMemo(
     () => Math.ceil(totalUsers / itemsPerPage),
     [totalUsers, itemsPerPage]
@@ -358,17 +371,9 @@ const Users: React.FC = () => {
             <table className="users__table">
               <thead>
                 <tr>
-                  {[
-                    "Organization",
-                    "User",
-                    "Email",
-                    "Phone Number",
-                    "Date Joined",
-                    "Status",
-                    "",
-                  ].map((header) => (
-                    <th key={header}>
-                      {header === "" ? (
+                  {tableHeaders.map(({ key, label, desktopOnly }) => (
+                    <th key={key} className={desktopOnly ? "desktop-only" : ""}>
+                      {key === "actions" ? (
                         <button
                           className="action-button"
                           aria-label="Filter"
@@ -379,7 +384,7 @@ const Users: React.FC = () => {
                           <Filter size={16} />
                         </button>
                       ) : (
-                        header
+                        label
                       )}
                     </th>
                   ))}
@@ -390,7 +395,7 @@ const Users: React.FC = () => {
                   <tr key={user.id}>
                     <td>{user.organization}</td>
                     <td>{user.username}</td>
-                    <td>{user.email}</td>
+                    <td className="desktop-only">{user.email}</td>
                     <td>{user.phoneNumber}</td>
                     <td>{user.dateJoined}</td>
                     <td>

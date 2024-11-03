@@ -1,7 +1,7 @@
 import Header from "../components/header";
 import NavSidebar from "../components/navBar";
 import "../styles/dashboard.scss";
-import User from "../components/user";
+import { Outlet } from "react-router-dom";
 import React, { useState } from "react";
 import { Menu } from "lucide-react";
 
@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
           <NavSidebar />
         </aside>
         <main className="dashboard__main">
-          <User />
+          <Outlet />
         </main>
       </div>
     </div>
