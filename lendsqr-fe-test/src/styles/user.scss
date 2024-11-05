@@ -120,6 +120,7 @@
       align-items: center;
       gap: 0.5rem;
       min-height: 3rem;
+      justify-content: space-between;
 
       &:before {
         content: attr(data-label);
@@ -145,7 +146,6 @@
         display: table-header-group;
 
         th {
-          text-align: left;
           padding: 0.75rem;
           color: #545f7d;
           font-weight: 600;
@@ -477,6 +477,7 @@
 
 .action-dropdown {
   position: relative;
+  margin-left: auto;
 }
 
 .user-dropdown {
@@ -530,5 +531,9 @@
   &:hover {
     background-color: #f5f5f5;
     border-radius: 4px;
+  }
+
+  .td-content {
+    margin-left: auto !important;
   }
 }
