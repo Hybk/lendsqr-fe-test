@@ -260,6 +260,51 @@ const Users: React.FC = () => {
     </div>
   );
 
+  const MobileTableCard: React.FC<{ user: User }> = ({ user }) => {
+    const [isActionsOpen, setIsActionsOpen] = useState(false);
+
+    return (
+      <tr>
+        <td data-label="Organization">
+          <span className="td-content">{user.organization}</span>
+        </td>
+        <td data-label="Username">
+          <span className="td-content">{user.username}</span>
+        </td>
+        <td data-label="Email">
+          <span className="td-content">{user.email}</span>
+        </td>
+        <td data-label="Phone Number">
+          <span className="td-content">{user.phoneNumber}</span>
+        </td>
+        <td data-label="Date Joined">
+          <span className="td-content">{user.dateJoined}</span>
+        </td>
+        <td data-label="Status">
+          <span className={getStatusClass(user.status)}>{user.status}</span>
+        </td>
+        <td data-label="Actions" onClick={(e) => e.stopPropagation()}>
+          <div className="action-dropdown">
+            <button
+              className="action-button"
+              aria-label="More options"
+              onClick={() => setIsActionsOpen(!isActionsOpen)}
+            >
+              <MoreVertical size={16} />
+            </button>
+            <UserDropdown
+              userId={user.id}
+              isOpen={isActionsOpen}
+              onAction={(action, id) => {
+                handleUserAction(action, id);
+                setIsActionsOpen(false);
+              }}
+            />
+          </div>
+        </td>
+      </tr>
+    );
+  };
   const renderPagination = () => (
     <div className="users__pagination">
       <div className="users__pagination-select">
@@ -374,8 +419,8 @@ const Users: React.FC = () => {
             <table className="users__table">
               <thead>
                 <tr>
-                  {tableHeaders.map(({ key, label, desktopOnly }) => (
-                    <th key={key} className={desktopOnly ? "desktop-only" : ""}>
+                  {tableHeaders.map(({ key, label }) => (
+                    <th key={key}>
                       {key === "actions" ? (
                         <button
                           className="action-button"
@@ -395,39 +440,7 @@ const Users: React.FC = () => {
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.organization}</td>
-                    <td>{user.username}</td>
-                    <td className="desktop-only">{user.email}</td>
-                    <td>{user.phoneNumber}</td>
-                    <td>{user.dateJoined}</td>
-                    <td>
-                      <span className={getStatusClass(user.status)}>
-                        {user.status}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="action-dropdown">
-                        <button
-                          className="action-button"
-                          aria-label="More options"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setOpenDropdownId(
-                              openDropdownId === user.id ? null : user.id
-                            );
-                          }}
-                        >
-                          <MoreVertical size={16} />
-                        </button>
-                        <UserDropdown
-                          userId={user.id}
-                          isOpen={openDropdownId === user.id}
-                          onAction={handleUserAction}
-                        />
-                      </div>
-                    </td>
-                  </tr>
+                  <MobileTableCard key={user.id} user={user} />
                 ))}
               </tbody>
             </table>
