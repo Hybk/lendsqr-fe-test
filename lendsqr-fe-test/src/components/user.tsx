@@ -253,8 +253,10 @@ const Users: React.FC = () => {
       ].map(({ icon, title, value, iconClass }) => (
         <div key={title} className="stat-card">
           <div className={`stat-card__icon ${iconClass || ""}`}>{icon}</div>
-          <h3>{title}</h3>
-          <p>{value.toLocaleString()}</p>
+          <div className="stat-card__text">
+            <h3>{title}</h3>
+            <p>{value.toLocaleString()}</p>
+          </div>
         </div>
       ))}
     </div>
@@ -271,7 +273,7 @@ const Users: React.FC = () => {
         <td data-label="Username">
           <span className="td-content">{user.username}</span>
         </td>
-        <td data-label="Email">
+        <td data-label="Email" className="only__desktop">
           <span className="td-content">{user.email}</span>
         </td>
         <td data-label="Phone Number">
